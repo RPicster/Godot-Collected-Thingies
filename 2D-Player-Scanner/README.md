@@ -1,6 +1,6 @@
 # 2D Target Scanner
 
-![](bottomless_scanner.gif?raw=true)
+![](readme_images/bottomless_scanner.gif?raw=true)
 
 This script comes in two variants:
 
@@ -21,12 +21,12 @@ This script sets four points around the central point, checks if the points can 
 **Scanner Size:**
 Here you can set the distance to the "external eyes" from the central point in pixels.
 
-![Scanner Size: 8](readme_scanner_size_8.jpg?raw=true)
+![Scanner Size: 8](readme_images/readme_scanner_size_8.jpg?raw=true)
 
 Scanner Size: 8
 
 
-![Scanner Size: 48](readme_scanner_size_48.jpg?raw=true)
+![Scanner Size: 48](readme_images/readme_scanner_size_48.jpg?raw=true)
 
 Scanner Size: 48
 
