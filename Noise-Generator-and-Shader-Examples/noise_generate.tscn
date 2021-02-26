@@ -1,0 +1,149 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://export_png.gd" type="Script" id=1]
+
+[sub_resource type="OpenSimplexNoise" id=1]
+octaves = 4
+
+[sub_resource type="NoiseTexture" id=2]
+seamless = true
+noise = SubResource( 1 )
+
+[node name="NoiseGeneration" type="ViewportContainer"]
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+viewport_path = NodePath("Viewport")
+noise = NodePath("Viewport/Noise")
+
+[node name="Viewport" type="Viewport" parent="."]
+size = Vector2( 512, 512 )
+handle_input_locally = false
+usage = 0
+render_target_update_mode = 3
+
+[node name="Noise" type="Sprite" parent="Viewport"]
+texture = SubResource( 2 )
+centered = false
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+margin_left = 10.0
+margin_top = 10.0
+margin_right = 93.0
+margin_bottom = 60.0
+custom_constants/separation = 5
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ButtonSave" type="Button" parent="VBoxContainer"]
+margin_right = 83.0
+margin_bottom = 20.0
+text = "Save"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
+margin_top = 25.0
+margin_right = 83.0
+margin_bottom = 29.0
+
+[node name="LabelSeed" type="Label" parent="VBoxContainer"]
+margin_top = 34.0
+margin_right = 83.0
+margin_bottom = 48.0
+text = "Seed"
+
+[node name="HSliderSeed" type="HSlider" parent="VBoxContainer"]
+margin_top = 53.0
+margin_right = 83.0
+margin_bottom = 69.0
+max_value = 50.0
+rounded = true
+
+[node name="HSeparator2" type="HSeparator" parent="VBoxContainer"]
+margin_top = 74.0
+margin_right = 83.0
+margin_bottom = 78.0
+
+[node name="LabelOctaves" type="Label" parent="VBoxContainer"]
+margin_top = 83.0
+margin_right = 83.0
+margin_bottom = 97.0
+text = "Octaves"
+
+[node name="HSliderOctaves" type="HSlider" parent="VBoxContainer"]
+margin_top = 102.0
+margin_right = 83.0
+margin_bottom = 118.0
+max_value = 9.0
+value = 4.0
+rounded = true
+
+[node name="HSeparator3" type="HSeparator" parent="VBoxContainer"]
+margin_top = 123.0
+margin_right = 83.0
+margin_bottom = 127.0
+
+[node name="LabelPeriod" type="Label" parent="VBoxContainer"]
+margin_top = 132.0
+margin_right = 83.0
+margin_bottom = 146.0
+text = "Period"
+
+[node name="HSliderPeriod" type="HSlider" parent="VBoxContainer"]
+margin_top = 151.0
+margin_right = 83.0
+margin_bottom = 167.0
+min_value = 1.0
+max_value = 256.0
+value = 64.0
+rounded = true
+
+[node name="HSeparator4" type="HSeparator" parent="VBoxContainer"]
+margin_top = 172.0
+margin_right = 83.0
+margin_bottom = 176.0
+
+[node name="LabelPersistence" type="Label" parent="VBoxContainer"]
+margin_top = 181.0
+margin_right = 83.0
+margin_bottom = 195.0
+text = "Persistence"
+
+[node name="HSliderPersistence" type="HSlider" parent="VBoxContainer"]
+margin_top = 200.0
+margin_right = 83.0
+margin_bottom = 216.0
+max_value = 1.0
+step = 0.01
+value = 0.5
+
+[node name="HSeparator5" type="HSeparator" parent="VBoxContainer"]
+margin_top = 221.0
+margin_right = 83.0
+margin_bottom = 225.0
+
+[node name="LabelLacunarity" type="Label" parent="VBoxContainer"]
+margin_top = 230.0
+margin_right = 83.0
+margin_bottom = 244.0
+text = "Lucanarity"
+
+[node name="HSliderLacunarity" type="HSlider" parent="VBoxContainer"]
+margin_top = 249.0
+margin_right = 83.0
+margin_bottom = 265.0
+min_value = 0.1
+max_value = 4.0
+step = 0.1
+value = 2.0
+
+[connection signal="pressed" from="VBoxContainer/ButtonSave" to="." method="_on_ButtonSave_pressed"]
+[connection signal="value_changed" from="VBoxContainer/HSliderSeed" to="." method="_on_HSliderSeed_value_changed"]
+[connection signal="value_changed" from="VBoxContainer/HSliderOctaves" to="." method="_on_HSliderOctaves_value_changed"]
+[connection signal="value_changed" from="VBoxContainer/HSliderPeriod" to="." method="_on_HSliderPeriod_value_changed"]
+[connection signal="value_changed" from="VBoxContainer/HSliderPersistence" to="." method="_on_HSliderPersistence_value_changed"]
+[connection signal="value_changed" from="VBoxContainer/HSliderLacunarity" to="." method="_on_HSliderLacunarity_value_changed"]
