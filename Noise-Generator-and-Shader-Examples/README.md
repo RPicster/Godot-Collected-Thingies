@@ -9,7 +9,7 @@ Shader example scene - Here you'll find three example uses of noise in a 2D shad
 
 ## How to use?
 
-Best is to watch the YouTube video (link following after upload) explaining the creation of this example project, the generator and the combination process of different noise textures.
+Best is to watch the [**YouTube video**](https://youtu.be/IvOfx-kbqac) explaining the creation of this example project, the generator and the combination process of different noise textures.
 
 
 # License
