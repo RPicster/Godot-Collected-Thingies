@@ -1,0 +1,228 @@
+[gd_scene load_steps=13 format=2]
+
+[ext_resource path="res://explanation/Camera2D.png" type="Texture" id=1]
+[ext_resource path="res://explanation/explanation.gd" type="Script" id=2]
+[ext_resource path="res://explanation/SubViewportContainer.png" type="Texture" id=3]
+[ext_resource path="res://explanation/example.png" type="Texture" id=4]
+
+[sub_resource type="DynamicFontData" id=2]
+font_path = "res://saarland.ttf"
+
+[sub_resource type="DynamicFont" id=3]
+size = 12
+outline_size = 1
+outline_color = Color( 0.552941, 0.647059, 0.952941, 1 )
+font_data = SubResource( 2 )
+
+[sub_resource type="Animation" id=1]
+resource_name = "cam_move"
+length = 3.0
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:cam_move_progress")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1.5, 3 ),
+"transitions": PoolRealArray( -4, -5, -4 ),
+"update": 0,
+"values": [ 0.0, 34.0, 0.0 ]
+}
+
+[sub_resource type="ViewportTexture" id=4]
+viewport_path = NodePath("Viewport_LowRes")
+
+[sub_resource type="ViewportTexture" id=5]
+viewport_path = NodePath("Viewport_HighRes")
+
+[sub_resource type="Shader" id=7]
+code = "shader_type canvas_item;
+
+uniform vec2 cam_offset = vec2(0.0,0.0);
+
+void vertex() {
+	VERTEX += cam_offset;
+}"
+
+[sub_resource type="ShaderMaterial" id=8]
+shader = SubResource( 7 )
+shader_param/cam_offset = Vector2( 0, 0 )
+
+[sub_resource type="ViewportTexture" id=6]
+viewport_path = NodePath("Viewport_LowRes")
+
+[node name="Explanation" type="Node2D"]
+script = ExtResource( 2 )
+cam_move_progress = 5.0
+
+[node name="Example" type="Sprite" parent="."]
+position = Vector2( 320, 120 )
+scale = Vector2( 8, 8 )
+z_index = -5
+texture = ExtResource( 4 )
+
+[node name="Pixelgrid" type="Node2D" parent="."]
+
+[node name="PixelgridLine" type="Line2D" parent="."]
+position = Vector2( 64, 32 )
+points = PoolVector2Array( 0, 0, 512, 176 )
+width = 0.5
+default_color = Color( 0, 0, 0, 0.117647 )
+
+[node name="CameraView" type="Polygon2D" parent="."]
+position = Vector2( 24, -8 )
+color = Color( 0.333333, 0.470588, 0.345098, 0.0745098 )
+polygon = PoolVector2Array( 48, 48, 272, 48, 272, 208, 48, 208 )
+
+[node name="SubViewportContainer" type="Sprite" parent="CameraView"]
+position = Vector2( 64, 64 )
+scale = Vector2( 0.035, 0.035 )
+texture = ExtResource( 3 )
+
+[node name="Camera2d" type="Sprite" parent="CameraView"]
+position = Vector2( 160, 128 )
+scale = Vector2( 0.06, 0.06 )
+z_index = 5
+texture = ExtResource( 1 )
+
+[node name="CameraView2" type="Polygon2D" parent="CameraView/Camera2d"]
+position = Vector2( -2666.67, -2133.33 )
+scale = Vector2( 16.6667, 16.6667 )
+z_index = -3
+color = Color( 0.552941, 0.647059, 0.952941, 0 )
+polygon = PoolVector2Array( 40, 40, 280, 40, 280, 216, 40, 216 )
+
+[node name="CamPosLabel" type="Label" parent="CameraView/Camera2d/CameraView2"]
+margin_left = 64.0
+margin_top = 144.0
+margin_right = 256.0
+margin_bottom = 192.0
+custom_fonts/font = SubResource( 3 )
+text = "asdsad"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Line2D2" type="Line2D" parent="CameraView/Camera2d"]
+position = Vector2( -2666.67, -2133.33 )
+scale = Vector2( 16.6667, 16.6667 )
+points = PoolVector2Array( 120, 40, 280, 40, 280, 216, 40, 216, 40, 40, 120, 40 )
+width = 2.0
+default_color = Color( 0.552941, 0.647059, 0.952941, 1 )
+
+[node name="ShaderOffset" type="Label" parent="CameraView"]
+modulate = Color( 0.556863, 0.937255, 0.592157, 1 )
+margin_left = 79.0
+margin_top = 52.0
+margin_right = 271.0
+margin_bottom = 100.0
+custom_fonts/font = SubResource( 3 )
+text = "asdsad"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Line2D" type="Line2D" parent="CameraView"]
+points = PoolVector2Array( 120, 48, 272, 48, 272, 208, 48, 208, 48, 48, 120, 48 )
+width = 2.0
+default_color = Color( 0.556863, 0.937255, 0.592157, 1 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+autoplay = "cam_move"
+playback_speed = 0.2
+anims/cam_move = SubResource( 1 )
+
+[node name="HSlider" type="HSlider" parent="."]
+margin_left = 64.0
+margin_top = 344.0
+margin_right = 576.0
+margin_bottom = 360.0
+max_value = 34.0
+step = 0.001
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Viewport_LowRes" type="Viewport" parent="."]
+size = Vector2( 30, 22 )
+usage = 0
+render_target_v_flip = true
+
+[node name="Example2" type="Sprite" parent="Viewport_LowRes"]
+z_index = -5
+texture = ExtResource( 4 )
+centered = false
+
+[node name="Viewport_LowRes2" type="Viewport" parent="."]
+size = Vector2( 30, 22 )
+usage = 0
+render_target_v_flip = true
+
+[node name="Example2" type="Sprite" parent="Viewport_LowRes2"]
+z_index = -5
+texture = ExtResource( 4 )
+centered = false
+
+[node name="Viewport_HighRes" type="Viewport" parent="."]
+size = Vector2( 560, 400 )
+usage = 0
+render_target_v_flip = true
+
+[node name="Example2" type="Sprite" parent="Viewport_HighRes"]
+position = Vector2( -20, -20 )
+scale = Vector2( 20, 20 )
+z_index = -5
+texture = ExtResource( 4 )
+centered = false
+
+[node name="Sprite" type="Sprite" parent="."]
+position = Vector2( 104, 232 )
+scale = Vector2( 5, 5 )
+texture = SubResource( 4 )
+centered = false
+
+[node name="Sprite2" type="Sprite" parent="."]
+visible = false
+position = Vector2( 360, 237 )
+scale = Vector2( 0.25, 0.25 )
+texture = SubResource( 5 )
+centered = false
+
+[node name="Sprite3" type="Sprite" parent="."]
+material = SubResource( 8 )
+position = Vector2( 355, 232 )
+scale = Vector2( 5, 5 )
+texture = SubResource( 6 )
+centered = false
+
+[node name="Line2D" type="Line2D" parent="."]
+position = Vector2( 312, 189 )
+points = PoolVector2Array( 120, 48, 188, 48, 188, 148, 48, 148, 48, 48, 120, 48 )
+width = 2.0
+default_color = Color( 0.556863, 0.937255, 0.592157, 1 )
+
+[node name="Line2D2" type="Line2D" parent="."]
+position = Vector2( 56, 184 )
+points = PoolVector2Array( 120, 48, 198, 48, 198, 158, 48, 158, 48, 48, 120, 48 )
+width = 2.0
+default_color = Color( 0.552941, 0.647059, 0.952941, 1 )
+
+[node name="CamPos" type="Polygon2D" parent="."]
+position = Vector2( 181, 124 )
+z_index = 10
+z_as_relative = false
+color = Color( 0.274658, 0.342386, 0.5625, 1 )
+polygon = PoolVector2Array( 0, 3, -3, 0, 0, -3, 3, 0 )
+
+[node name="DesCamPos" type="Polygon2D" parent="."]
+visible = false
+position = Vector2( 181, 124 )
+z_index = 10
+z_as_relative = false
+color = Color( 1, 0.458824, 0.0627451, 1 )
+polygon = PoolVector2Array( 0, 3, -3, 0, 0, -3, 3, 0 )
+
+[connection signal="value_changed" from="HSlider" to="." method="_on_HSlider_value_changed"]

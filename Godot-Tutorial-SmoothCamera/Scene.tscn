@@ -1,0 +1,199 @@
+[gd_scene load_steps=13 format=2]
+
+[ext_resource path="res://camera_script.gd" type="Script" id=1]
+[ext_resource path="res://tilemap_packed.png" type="Texture" id=3]
+[ext_resource path="res://player.gd" type="Script" id=4]
+[ext_resource path="res://snow.png" type="Texture" id=5]
+
+[sub_resource type="Animation" id=2]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 0 ]
+}
+
+[sub_resource type="Animation" id=3]
+resource_name = "idle"
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 0 ]
+}
+
+[sub_resource type="Animation" id=4]
+resource_name = "run"
+length = 0.2
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ 0, 1 ]
+}
+
+[sub_resource type="TileSet" id=1]
+0/name = "tilemap_packed.png 0"
+0/texture = ExtResource( 3 )
+0/tex_offset = Vector2( 0, 0 )
+0/modulate = Color( 1, 1, 1, 1 )
+0/region = Rect2( 0, 0, 160, 96 )
+0/tile_mode = 2
+0/autotile/icon_coordinate = Vector2( 0, 0 )
+0/autotile/tile_size = Vector2( 16, 16 )
+0/autotile/spacing = 0
+0/autotile/occluder_map = [  ]
+0/autotile/navpoly_map = [  ]
+0/autotile/priority_map = [  ]
+0/autotile/z_index_map = [  ]
+0/occluder_offset = Vector2( 0, 0 )
+0/navigation_offset = Vector2( 0, 0 )
+0/shape_offset = Vector2( 0, 0 )
+0/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+0/shape_one_way = false
+0/shape_one_way_margin = 0.0
+0/shapes = [  ]
+0/z_index = 0
+
+[sub_resource type="ParticlesMaterial" id=5]
+emission_shape = 1
+emission_sphere_radius = 3.0
+flag_disable_z = true
+gravity = Vector3( -50, 90, 0 )
+angular_velocity = 500.0
+angular_velocity_random = 1.0
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+angle = 360.0
+angle_random = 1.0
+
+[sub_resource type="GDScript" id=8]
+script/source = "extends Sprite
+
+var time := 0.0
+onready var start_pos = position
+
+func _physics_process(delta):
+	time = wrapf(time+delta, -PI, PI)
+	var new_pos = Vector2(sin(time)*12, cos(time)*4)
+	scale.x = sign(cos(time))
+	
+	position = start_pos + new_pos
+"
+
+[sub_resource type="Animation" id=6]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 0 ]
+}
+
+[sub_resource type="Animation" id=7]
+resource_name = "flying"
+length = 0.2
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ 0, 1 ]
+}
+
+[node name="Scene" type="Node2D"]
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2( 42, 25 )
+current = true
+script = ExtResource( 1 )
+player = NodePath("../Player")
+
+[node name="Player" type="Sprite" parent="."]
+position = Vector2( 27, 21 )
+z_index = 1
+texture = ExtResource( 3 )
+hframes = 2
+region_enabled = true
+region_rect = Rect2( 80, 64, 32, 16 )
+script = ExtResource( 4 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Player"]
+anims/RESET = SubResource( 2 )
+anims/idle = SubResource( 3 )
+anims/run = SubResource( 4 )
+
+[node name="Decoration" type="Node2D" parent="."]
+
+[node name="TileMap" type="TileMap" parent="Decoration"]
+position = Vector2( -29.1769, -18.9316 )
+tile_set = SubResource( 1 )
+cell_size = Vector2( 16, 16 )
+format = 1
+tile_data = PoolIntArray( -131072, 0, 0, -131071, 0, 0, -131070, 0, 0, -131069, 0, 0, -131068, 0, 0, -131067, 0, 0, -131066, 0, 0, -131065, 0, 0, -131064, 0, 0, -131063, 0, 0, -131062, 0, 0, -65536, 0, 1, -65535, 0, 2, -65534, 0, 0, -65533, 0, 0, -65532, 0, 0, -65531, 0, 0, -65530, 0, 0, -65529, 0, 0, -65528, 0, 65538, -65527, 0, 0, -65526, 0, 196616, 0, 0, 0, 1, 0, 0, 2, 0, 0, 3, 0, 0, 4, 0, 0, 5, 0, 0, 6, 0, 196616, 7, 0, 0, 8, 0, 0, 9, 0, 0, 10, 0, 196617, 65536, 0, 0, 65537, 0, 65538, 65538, 0, 0, 65539, 0, 1, 65540, 0, 2, 65541, 0, 0, 65542, 0, 262151, 65543, 0, 65537, 65544, 0, 196612, 65545, 0, 196609, 65546, 0, 327688, 131072, 0, 0, 131073, 0, 0, 131074, 0, 0, 131075, 0, 0, 131076, 0, 196614, 131077, 0, 196616, 131078, 0, 327688, 131079, 0, 131079, 131080, 0, 4, 131081, 0, 7, 131082, 0, 7, 196608, 0, 0, 196609, 0, 0, 196610, 0, 0, 196611, 0, 3, 196612, 0, 7, 196613, 0, 4, 196614, 0, 7, 196615, 0, 131077, 196616, 0, 65540, 196617, 0, 65540, 196618, 0, 65540, 262144, 0, 196608, 262145, 0, 196609, 262146, 0, 0, 262147, 0, 65539, 262148, 0, 65540, 262149, 0, 65540, 262150, 0, 65540, 262151, 0, 65540, 262152, 0, 65540, 262153, 0, 65540, 262154, 0, 65540, 327680, 0, 7, 327681, 0, 4, 327682, 0, 7, 327683, 0, 131077, 327684, 0, 65540, 327685, 0, 65540, 327686, 0, 65540, 327687, 0, 65540, 327688, 0, 65540, 327689, 0, 65540, 327690, 0, 65540 )
+
+[node name="Leaves" type="Particles2D" parent="Decoration"]
+modulate = Color( 0.713726, 0.835294, 0.235294, 1 )
+position = Vector2( 75, -13 )
+z_index = 2
+amount = 4
+lifetime = 3.0
+speed_scale = 0.5
+process_material = SubResource( 5 )
+texture = ExtResource( 5 )
+
+[node name="Leaves2" type="Particles2D" parent="Decoration"]
+modulate = Color( 0.713726, 0.835294, 0.235294, 1 )
+position = Vector2( 139, -29 )
+z_index = 2
+amount = 4
+lifetime = 3.0
+speed_scale = 0.5
+process_material = SubResource( 5 )
+texture = ExtResource( 5 )
+
+[node name="Enemy" type="Sprite" parent="Decoration"]
+position = Vector2( 83, -1 )
+texture = ExtResource( 3 )
+hframes = 2
+region_enabled = true
+region_rect = Rect2( 16, 80, 32, 16 )
+script = SubResource( 8 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Decoration/Enemy"]
+autoplay = "flying"
+playback_speed = 0.8
+anims/RESET = SubResource( 6 )
+anims/flying = SubResource( 7 )

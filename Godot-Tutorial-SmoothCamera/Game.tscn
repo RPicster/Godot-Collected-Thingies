@@ -1,0 +1,117 @@
+[gd_scene load_steps=10 format=2]
+
+[ext_resource path="res://Scene.tscn" type="PackedScene" id=1]
+[ext_resource path="res://game.gd" type="Script" id=2]
+[ext_resource path="res://tilemap_packed.png" type="Texture" id=3]
+
+[sub_resource type="Shader" id=7]
+code = "shader_type canvas_item;
+
+uniform vec2 cam_offset = vec2(0.0,0.0);
+
+void vertex() {
+	VERTEX += cam_offset;
+}"
+
+[sub_resource type="ShaderMaterial" id=8]
+shader = SubResource( 7 )
+shader_param/cam_offset = Vector2( 0, 0 )
+
+[sub_resource type="StyleBoxFlat" id=5]
+bg_color = Color( 0, 0, 0, 0.705882 )
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="GDScript" id=6]
+script/source = "extends Panel
+
+var shown := false
+var time := 0.0
+
+func _physics_process(delta):
+	if Input.is_action_pressed(\"ui_down\") and !shown:
+		shown = true
+		$Tween.interpolate_property(self, \"modulate:a\", 0, 1, 0.4)
+		$Tween.interpolate_property($MarginContainer/RichTextLabel, \"percent_visible\", 0, 1, 2)
+		$Tween.interpolate_property($Portrait, \"scale\", Vector2(1.5, 0.5)*7.325, Vector2.ONE*7.325, 1.2, Tween.TRANS_ELASTIC, Tween.EASE_OUT)
+		$Tween.start()
+	
+	time = wrapf(time+delta*5, -PI, PI)
+	$Portrait.rotation_degrees = sin(time)*3
+"
+
+[sub_resource type="DynamicFontData" id=9]
+font_path = "res://saarland.ttf"
+
+[sub_resource type="DynamicFont" id=4]
+size = 33
+font_data = SubResource( 9 )
+
+[node name="Game" type="Node2D"]
+script = ExtResource( 2 )
+
+[node name="ViewportContainer" type="ViewportContainer" parent="."]
+material = SubResource( 8 )
+margin_left = -8.0
+margin_top = -8.0
+margin_right = 74.0
+margin_bottom = 39.0
+rect_scale = Vector2( 8, 8 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Viewport" type="Viewport" parent="ViewportContainer"]
+size = Vector2( 82, 47 )
+handle_input_locally = false
+render_target_update_mode = 3
+
+[node name="Scene" parent="ViewportContainer/Viewport" instance=ExtResource( 1 )]
+
+[node name="Panel" type="Panel" parent="."]
+modulate = Color( 1, 1, 1, 0 )
+margin_left = 16.0
+margin_top = 248.0
+margin_right = 624.0
+margin_bottom = 344.0
+custom_styles/panel = SubResource( 5 )
+script = SubResource( 6 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_constants/margin_right = 10
+custom_constants/margin_top = 10
+custom_constants/margin_left = 90
+custom_constants/margin_bottom = 10
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Panel/MarginContainer"]
+margin_left = 90.0
+margin_top = 10.0
+margin_right = 598.0
+margin_bottom = 86.0
+custom_fonts/normal_font = SubResource( 4 )
+visible_characters = 0
+percent_visible = 0.0
+text = "Oh, what a cute bee!
+I bet it's hiding honey somewhere!"
+scroll_active = false
+
+[node name="Portrait" type="Sprite" parent="Panel"]
+position = Vector2( 45, 88 )
+scale = Vector2( 7.325, 7.325 )
+texture = ExtResource( 3 )
+centered = false
+offset = Vector2( -4.5, -11 )
+region_enabled = true
+region_rect = Rect2( 83, 66, 10, 11 )
+
+[node name="Tween" type="Tween" parent="Panel"]
