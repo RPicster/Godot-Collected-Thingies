@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://pb30er7baho3"
-path="res://.godot/imported/laserpointer.png-94d9dbb312a44d9b0e58b60a8db3dd40.ctex"
+uid="uid://boadljilggckc"
+path="res://.godot/imported/unlocked.png-c7074a008d5b9685a0864811807d8444.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://laserpointer.png"
-dest_files=["res://.godot/imported/laserpointer.png-94d9dbb312a44d9b0e58b60a8db3dd40.ctex"]
+source_file="res://unlocked.png"
+dest_files=["res://.godot/imported/unlocked.png-c7074a008d5b9685a0864811807d8444.ctex"]
 
 [params]
 
