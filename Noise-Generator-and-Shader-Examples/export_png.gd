@@ -6,7 +6,7 @@ extends Node
 @onready var target_viewport = get_node(viewport_path) if viewport_path else get_tree().root.get_viewport()
 
 func _on_button_save_pressed():
-	save_to("res://captures/noise_"+ str( Time.get_unix_time_from_system() ) +".png")	
+	save_to("res://noise_"+ str( Time.get_unix_time_from_system() ) +".png")	
 
 func save_to(path):
 	var texture : Texture2D = $SubViewport/Box/Noise.texture
@@ -56,9 +56,9 @@ func _on_button_random_pressed():
 		noise.set_fractal_type(val)
 	
 	if ! $SubViewport/Box/HB/Controls/Seed/Lock.is_pressed():
-		var seed = randi()
-		$SubViewport/Box/HB/Controls/HSliderSeed.value = seed
-		noise.set_seed(seed)
+		var newseed = randi()
+		$SubViewport/Box/HB/Controls/HSliderSeed.value = newseed
+		noise.set_seed(newseed)
 
 
 	if ! $SubViewport/Box/HB/Controls/Frequency/Lock.is_pressed():
