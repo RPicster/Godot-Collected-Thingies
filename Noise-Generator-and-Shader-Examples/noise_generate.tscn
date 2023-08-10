@@ -159,7 +159,7 @@ stretch_mode = 3
 
 [node name="HSliderSeed" type="HSlider" parent="SubViewport/Box/HB/Controls"]
 layout_mode = 2
-max_value = 50.0
+max_value = 4e+06
 rounded = true
 
 [node name="HSeparator8" type="HSeparator" parent="SubViewport/Box/HB/Controls"]
@@ -185,7 +185,7 @@ texture_normal = ExtResource("2_vya7j")
 texture_pressed = ExtResource("2_guku6")
 stretch_mode = 3
 
-[node name="HSliderLacunarity2" type="HSlider" parent="SubViewport/Box/HB/Controls"]
+[node name="HSliderFrequency" type="HSlider" parent="SubViewport/Box/HB/Controls"]
 layout_mode = 2
 min_value = 0.1
 max_value = 4.0
@@ -250,9 +250,6 @@ min_value = 0.1
 max_value = 10.0
 step = 0.1
 value = 2.0
-
-[node name="HBoxContainer4" type="HBoxContainer" parent="SubViewport/Box/HB/Controls"]
-layout_mode = 2
 
 [node name="VSeparator" type="VSeparator" parent="SubViewport/Box/HB"]
 layout_mode = 2
@@ -325,23 +322,24 @@ layout_mode = 2
 [node name="Controls3" type="VBoxContainer" parent="SubViewport/Box/HB"]
 layout_mode = 2
 
-[node name="DomainWarp" type="Label" parent="SubViewport/Box/HB/Controls3"]
+[node name="DomainWarpTitle" type="Label" parent="SubViewport/Box/HB/Controls3"]
 layout_mode = 2
 text = "Domain Warp"
 horizontal_alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="SubViewport/Box/HB/Controls3"]
+[node name="DomainWarpEnable" type="HBoxContainer" parent="SubViewport/Box/HB/Controls3"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="SubViewport/Box/HB/Controls3/HBoxContainer"]
+[node name="Label" type="Label" parent="SubViewport/Box/HB/Controls3/DomainWarpEnable"]
 layout_mode = 2
 text = "Enabled"
 
-[node name="CheckButton" type="CheckButton" parent="SubViewport/Box/HB/Controls3/HBoxContainer"]
+[node name="CheckButton" type="CheckButton" parent="SubViewport/Box/HB/Controls3/DomainWarpEnable"]
 layout_mode = 2
 expand_icon = true
 
 [node name="DomainControls" type="VBoxContainer" parent="SubViewport/Box/HB/Controls3"]
+visible = false
 layout_mode = 2
 
 [node name="HSeparator" type="HSeparator" parent="SubViewport/Box/HB/Controls3/DomainControls"]
@@ -542,34 +540,19 @@ popup/item_2/id = 2
 [connection signal="pressed" from="SubViewport/Box/HB/Controls/ButtonSave" to="." method="_on_button_save_pressed"]
 [connection signal="pressed" from="SubViewport/Box/HB/Controls/ButtonRandom" to="." method="_on_button_random_pressed"]
 [connection signal="pressed" from="SubViewport/Box/HB/Controls/ButtonReset" to="." method="_on_button_reset_pressed"]
-[connection signal="toggled" from="SubViewport/Box/HB/Controls/NoiseType/Lock" to="." method="_on_check_button_toggled"]
 [connection signal="item_selected" from="SubViewport/Box/HB/Controls/NoiseTypeOption" to="." method="_on_noise_type_option_item_selected"]
-[connection signal="toggled" from="SubViewport/Box/HB/Controls/FractalType/Lock" to="." method="_on_check_button_toggled"]
 [connection signal="item_selected" from="SubViewport/Box/HB/Controls/FractalTypeOption" to="." method="_on_option_button_item_selected"]
-[connection signal="toggled" from="SubViewport/Box/HB/Controls/Seed/Lock" to="." method="_on_check_button_toggled"]
 [connection signal="value_changed" from="SubViewport/Box/HB/Controls/HSliderSeed" to="." method="_on_h_slider_seed_value_changed"]
-[connection signal="toggled" from="SubViewport/Box/HB/Controls/Frequency/Lock" to="." method="_on_check_button_toggled"]
-[connection signal="value_changed" from="SubViewport/Box/HB/Controls/HSliderLacunarity2" to="." method="_on_h_slider_lacunarity_value_changed"]
-[connection signal="toggled" from="SubViewport/Box/HB/Controls/Octaves/Lock" to="." method="_on_check_button_toggled"]
+[connection signal="value_changed" from="SubViewport/Box/HB/Controls/HSliderFrequency" to="." method="_on_h_slider_lacunarity_value_changed"]
 [connection signal="value_changed" from="SubViewport/Box/HB/Controls/HSliderOctaves" to="." method="_on_h_slider_octaves_value_changed"]
-[connection signal="toggled" from="SubViewport/Box/HB/Controls/Lacunarity/Lock" to="." method="_on_check_button_toggled"]
 [connection signal="value_changed" from="SubViewport/Box/HB/Controls/HSliderLacunarity" to="." method="_on_h_slider_lacunarity_value_changed"]
-[connection signal="toggled" from="SubViewport/Box/HB/Controls2/Gain/Lock" to="." method="_on_check_button_toggled"]
 [connection signal="value_changed" from="SubViewport/Box/HB/Controls2/HSliderGain" to="." method="_on_h_slider_gain_value_changed"]
-[connection signal="toggled" from="SubViewport/Box/HB/Controls2/WeightedStr/Lock" to="." method="_on_check_button_toggled"]
 [connection signal="value_changed" from="SubViewport/Box/HB/Controls2/HSliderWeighted" to="." method="_on_h_slider_weighted_value_changed"]
-[connection signal="toggled" from="SubViewport/Box/HB/Controls3/HBoxContainer/CheckButton" to="." method="_on_check_button_toggled"]
-[connection signal="toggled" from="SubViewport/Box/HB/Controls3/DomainControls/DWAmplitude/Lock" to="." method="_on_check_button_toggled"]
+[connection signal="toggled" from="SubViewport/Box/HB/Controls3/DomainWarpEnable/CheckButton" to="." method="_on_check_button_toggled"]
 [connection signal="value_changed" from="SubViewport/Box/HB/Controls3/DomainControls/Amplitude" to="." method="_on_amplitude_value_changed"]
-[connection signal="toggled" from="SubViewport/Box/HB/Controls3/DomainControls/DWGain/Lock" to="." method="_on_check_button_toggled"]
 [connection signal="value_changed" from="SubViewport/Box/HB/Controls3/DomainControls/Gain" to="." method="_on_gain_value_changed"]
-[connection signal="toggled" from="SubViewport/Box/HB/Controls3/DomainControls/DWLacunarity/Lock" to="." method="_on_check_button_toggled"]
 [connection signal="value_changed" from="SubViewport/Box/HB/Controls3/DomainControls/Lacunarity" to="." method="_on_lacunarity_value_changed"]
-[connection signal="toggled" from="SubViewport/Box/HB/Controls3/DomainControls/DWOctaves/Lock" to="." method="_on_check_button_toggled"]
 [connection signal="value_changed" from="SubViewport/Box/HB/Controls3/DomainControls/Octaves" to="." method="_on_octaves_value_changed"]
-[connection signal="toggled" from="SubViewport/Box/HB/Controls3/DomainControls/DWFrequency/Lock" to="." method="_on_check_button_toggled"]
 [connection signal="value_changed" from="SubViewport/Box/HB/Controls3/DomainControls/Frequency" to="." method="_on_frequency_value_changed"]
-[connection signal="toggled" from="SubViewport/Box/HB/Controls3/DomainControls/DWFractalType/Lock" to="." method="_on_check_button_toggled"]
 [connection signal="item_selected" from="SubViewport/Box/HB/Controls3/DomainControls/FracType" to="." method="_on_frac_type_item_selected"]
-[connection signal="toggled" from="SubViewport/Box/HB/Controls3/DomainControls/DWWarpType/Lock" to="." method="_on_check_button_toggled"]
 [connection signal="item_selected" from="SubViewport/Box/HB/Controls3/DomainControls/WarpType" to="." method="_on_warp_type_item_selected"]
