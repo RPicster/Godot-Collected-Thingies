@@ -1,149 +1,576 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=6 format=3 uid="uid://ht07cxpnk5m5"]
 
-[ext_resource path="res://export_png.gd" type="Script" id=1]
+[ext_resource type="Script" path="res://export_png.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://ct1rn5y3od002" path="res://locked.png" id="2_guku6"]
+[ext_resource type="Texture2D" uid="uid://boadljilggckc" path="res://unlocked.png" id="2_vya7j"]
 
-[sub_resource type="OpenSimplexNoise" id=1]
-octaves = 4
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_r8i8c"]
+noise_type = 4
+seed = 1
+domain_warp_amplitude = 60.0
+domain_warp_fractal_type = 0
+domain_warp_fractal_gain = 0.1
 
-[sub_resource type="NoiseTexture" id=2]
-seamless = true
-noise = SubResource( 1 )
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_nr1pi"]
+noise = SubResource("FastNoiseLite_r8i8c")
 
-[node name="NoiseGeneration" type="ViewportContainer"]
-script = ExtResource( 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-viewport_path = NodePath("Viewport")
-noise = NodePath("Viewport/Noise")
+[node name="NoiseGeneration" type="SubViewportContainer"]
+script = ExtResource("1")
+viewport_path = NodePath("SubViewport")
 
-[node name="Viewport" type="Viewport" parent="."]
-size = Vector2( 512, 512 )
+[node name="SubViewport" type="SubViewport" parent="."]
 handle_input_locally = false
-usage = 0
-render_target_update_mode = 3
+size = Vector2i(1024, 512)
+render_target_update_mode = 4
 
-[node name="Noise" type="Sprite" parent="Viewport"]
-texture = SubResource( 2 )
+[node name="Box" type="HBoxContainer" parent="SubViewport"]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Noise" type="Sprite2D" parent="SubViewport/Box"]
+texture = SubResource("NoiseTexture2D_nr1pi")
 centered = false
+offset = Vector2(512, 0)
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
-margin_left = 10.0
-margin_top = 10.0
-margin_right = 93.0
-margin_bottom = 60.0
-custom_constants/separation = 5
-__meta__ = {
-"_edit_use_anchors_": false
-}
+[node name="HB" type="HBoxContainer" parent="SubViewport/Box"]
+layout_mode = 2
+size_flags_horizontal = 8
 
-[node name="ButtonSave" type="Button" parent="VBoxContainer"]
-margin_right = 83.0
-margin_bottom = 20.0
+[node name="Controls" type="VBoxContainer" parent="SubViewport/Box/HB"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="ButtonSave" type="Button" parent="SubViewport/Box/HB/Controls"]
+modulate = Color(0.305882, 1, 0.447059, 1)
+layout_mode = 2
 text = "Save"
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
-[node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
-margin_top = 25.0
-margin_right = 83.0
-margin_bottom = 29.0
+[node name="ButtonRandom" type="Button" parent="SubViewport/Box/HB/Controls"]
+modulate = Color(1, 0.596078, 0.317647, 1)
+layout_mode = 2
+text = "Randomize"
 
-[node name="LabelSeed" type="Label" parent="VBoxContainer"]
-margin_top = 34.0
-margin_right = 83.0
-margin_bottom = 48.0
+[node name="ButtonReset" type="Button" parent="SubViewport/Box/HB/Controls"]
+modulate = Color(1, 0, 0.160784, 1)
+layout_mode = 2
+text = "Reset"
+
+[node name="HSeparator" type="HSeparator" parent="SubViewport/Box/HB/Controls"]
+layout_mode = 2
+
+[node name="NoiseType" type="HBoxContainer" parent="SubViewport/Box/HB/Controls"]
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="Label" type="Label" parent="SubViewport/Box/HB/Controls/NoiseType"]
+layout_mode = 2
+text = "Noise Type
+"
+
+[node name="VSeparator2" type="VSeparator" parent="SubViewport/Box/HB/Controls/NoiseType"]
+visibility_layer = 0
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+
+[node name="Lock" type="TextureButton" parent="SubViewport/Box/HB/Controls/NoiseType"]
+layout_mode = 2
+toggle_mode = true
+texture_normal = ExtResource("2_vya7j")
+texture_pressed = ExtResource("2_guku6")
+stretch_mode = 3
+
+[node name="NoiseTypeOption" type="OptionButton" parent="SubViewport/Box/HB/Controls"]
+layout_mode = 2
+flat = true
+item_count = 6
+selected = 1
+popup/item_0/text = "Simplex"
+popup/item_0/id = 0
+popup/item_1/text = "Simplex Smooth"
+popup/item_1/id = 1
+popup/item_2/text = "Cellular"
+popup/item_2/id = 2
+popup/item_3/text = "Perlin"
+popup/item_3/id = 3
+popup/item_4/text = "Cubic"
+popup/item_4/id = 4
+popup/item_5/text = "Value"
+popup/item_5/id = 5
+
+[node name="HSeparator7" type="HSeparator" parent="SubViewport/Box/HB/Controls"]
+layout_mode = 2
+
+[node name="FractalType" type="HBoxContainer" parent="SubViewport/Box/HB/Controls"]
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="Label" type="Label" parent="SubViewport/Box/HB/Controls/FractalType"]
+layout_mode = 2
+text = "Fractal Type
+"
+
+[node name="VSeparator2" type="VSeparator" parent="SubViewport/Box/HB/Controls/FractalType"]
+visibility_layer = 0
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+
+[node name="Lock" type="TextureButton" parent="SubViewport/Box/HB/Controls/FractalType"]
+layout_mode = 2
+toggle_mode = true
+texture_normal = ExtResource("2_vya7j")
+texture_pressed = ExtResource("2_guku6")
+stretch_mode = 3
+
+[node name="FractalTypeOption" type="OptionButton" parent="SubViewport/Box/HB/Controls"]
+layout_mode = 2
+flat = true
+item_count = 4
+selected = 1
+popup/item_0/text = "None"
+popup/item_0/id = 0
+popup/item_1/text = "FBM"
+popup/item_1/id = 1
+popup/item_2/text = "Ridged"
+popup/item_2/id = 2
+popup/item_3/text = "Ping-Pong"
+popup/item_3/id = 3
+
+[node name="HSeparator6" type="HSeparator" parent="SubViewport/Box/HB/Controls"]
+layout_mode = 2
+
+[node name="Seed" type="HBoxContainer" parent="SubViewport/Box/HB/Controls"]
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="LabelSeed" type="Label" parent="SubViewport/Box/HB/Controls/Seed"]
+layout_mode = 2
 text = "Seed"
 
-[node name="HSliderSeed" type="HSlider" parent="VBoxContainer"]
-margin_top = 53.0
-margin_right = 83.0
-margin_bottom = 69.0
+[node name="VSeparator2" type="VSeparator" parent="SubViewport/Box/HB/Controls/Seed"]
+visibility_layer = 0
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+
+[node name="Lock" type="TextureButton" parent="SubViewport/Box/HB/Controls/Seed"]
+layout_mode = 2
+toggle_mode = true
+texture_normal = ExtResource("2_vya7j")
+texture_pressed = ExtResource("2_guku6")
+stretch_mode = 3
+
+[node name="HSliderSeed" type="HSlider" parent="SubViewport/Box/HB/Controls"]
+layout_mode = 2
 max_value = 50.0
 rounded = true
 
-[node name="HSeparator2" type="HSeparator" parent="VBoxContainer"]
-margin_top = 74.0
-margin_right = 83.0
-margin_bottom = 78.0
+[node name="HSeparator8" type="HSeparator" parent="SubViewport/Box/HB/Controls"]
+layout_mode = 2
 
-[node name="LabelOctaves" type="Label" parent="VBoxContainer"]
-margin_top = 83.0
-margin_right = 83.0
-margin_bottom = 97.0
-text = "Octaves"
+[node name="Frequency" type="HBoxContainer" parent="SubViewport/Box/HB/Controls"]
+layout_mode = 2
+size_flags_horizontal = 8
 
-[node name="HSliderOctaves" type="HSlider" parent="VBoxContainer"]
-margin_top = 102.0
-margin_right = 83.0
-margin_bottom = 118.0
-max_value = 9.0
-value = 4.0
-rounded = true
+[node name="LabelSeed2" type="Label" parent="SubViewport/Box/HB/Controls/Frequency"]
+layout_mode = 2
+text = "Frequency"
 
-[node name="HSeparator3" type="HSeparator" parent="VBoxContainer"]
-margin_top = 123.0
-margin_right = 83.0
-margin_bottom = 127.0
+[node name="VSeparator2" type="VSeparator" parent="SubViewport/Box/HB/Controls/Frequency"]
+visibility_layer = 0
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
 
-[node name="LabelPeriod" type="Label" parent="VBoxContainer"]
-margin_top = 132.0
-margin_right = 83.0
-margin_bottom = 146.0
-text = "Period"
+[node name="Lock" type="TextureButton" parent="SubViewport/Box/HB/Controls/Frequency"]
+layout_mode = 2
+toggle_mode = true
+texture_normal = ExtResource("2_vya7j")
+texture_pressed = ExtResource("2_guku6")
+stretch_mode = 3
 
-[node name="HSliderPeriod" type="HSlider" parent="VBoxContainer"]
-margin_top = 151.0
-margin_right = 83.0
-margin_bottom = 167.0
-min_value = 1.0
-max_value = 256.0
-value = 64.0
-rounded = true
-
-[node name="HSeparator4" type="HSeparator" parent="VBoxContainer"]
-margin_top = 172.0
-margin_right = 83.0
-margin_bottom = 176.0
-
-[node name="LabelPersistence" type="Label" parent="VBoxContainer"]
-margin_top = 181.0
-margin_right = 83.0
-margin_bottom = 195.0
-text = "Persistence"
-
-[node name="HSliderPersistence" type="HSlider" parent="VBoxContainer"]
-margin_top = 200.0
-margin_right = 83.0
-margin_bottom = 216.0
-max_value = 1.0
-step = 0.01
-value = 0.5
-
-[node name="HSeparator5" type="HSeparator" parent="VBoxContainer"]
-margin_top = 221.0
-margin_right = 83.0
-margin_bottom = 225.0
-
-[node name="LabelLacunarity" type="Label" parent="VBoxContainer"]
-margin_top = 230.0
-margin_right = 83.0
-margin_bottom = 244.0
-text = "Lucanarity"
-
-[node name="HSliderLacunarity" type="HSlider" parent="VBoxContainer"]
-margin_top = 249.0
-margin_right = 83.0
-margin_bottom = 265.0
+[node name="HSliderLacunarity2" type="HSlider" parent="SubViewport/Box/HB/Controls"]
+layout_mode = 2
 min_value = 0.1
 max_value = 4.0
 step = 0.1
 value = 2.0
 
-[connection signal="pressed" from="VBoxContainer/ButtonSave" to="." method="_on_ButtonSave_pressed"]
-[connection signal="value_changed" from="VBoxContainer/HSliderSeed" to="." method="_on_HSliderSeed_value_changed"]
-[connection signal="value_changed" from="VBoxContainer/HSliderOctaves" to="." method="_on_HSliderOctaves_value_changed"]
-[connection signal="value_changed" from="VBoxContainer/HSliderPeriod" to="." method="_on_HSliderPeriod_value_changed"]
-[connection signal="value_changed" from="VBoxContainer/HSliderPersistence" to="." method="_on_HSliderPersistence_value_changed"]
-[connection signal="value_changed" from="VBoxContainer/HSliderLacunarity" to="." method="_on_HSliderLacunarity_value_changed"]
+[node name="HSeparator2" type="HSeparator" parent="SubViewport/Box/HB/Controls"]
+layout_mode = 2
+
+[node name="Octaves" type="HBoxContainer" parent="SubViewport/Box/HB/Controls"]
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="Label" type="Label" parent="SubViewport/Box/HB/Controls/Octaves"]
+layout_mode = 2
+text = "Octaves"
+
+[node name="VSeparator2" type="VSeparator" parent="SubViewport/Box/HB/Controls/Octaves"]
+visibility_layer = 0
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+
+[node name="Lock" type="TextureButton" parent="SubViewport/Box/HB/Controls/Octaves"]
+layout_mode = 2
+toggle_mode = true
+texture_normal = ExtResource("2_vya7j")
+texture_pressed = ExtResource("2_guku6")
+stretch_mode = 3
+
+[node name="HSliderOctaves" type="HSlider" parent="SubViewport/Box/HB/Controls"]
+layout_mode = 2
+max_value = 9.0
+value = 4.0
+rounded = true
+
+[node name="HSeparator5" type="HSeparator" parent="SubViewport/Box/HB/Controls"]
+layout_mode = 2
+
+[node name="Lacunarity" type="HBoxContainer" parent="SubViewport/Box/HB/Controls"]
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="Label" type="Label" parent="SubViewport/Box/HB/Controls/Lacunarity"]
+layout_mode = 2
+text = "Lacunarity"
+
+[node name="VSeparator" type="VSeparator" parent="SubViewport/Box/HB/Controls/Lacunarity"]
+visibility_layer = 0
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+
+[node name="Lock" type="TextureButton" parent="SubViewport/Box/HB/Controls/Lacunarity"]
+layout_mode = 2
+toggle_mode = true
+texture_normal = ExtResource("2_vya7j")
+texture_pressed = ExtResource("2_guku6")
+stretch_mode = 3
+
+[node name="HSliderLacunarity" type="HSlider" parent="SubViewport/Box/HB/Controls"]
+layout_mode = 2
+min_value = 0.1
+max_value = 10.0
+step = 0.1
+value = 2.0
+
+[node name="HBoxContainer4" type="HBoxContainer" parent="SubViewport/Box/HB/Controls"]
+layout_mode = 2
+
+[node name="VSeparator" type="VSeparator" parent="SubViewport/Box/HB"]
+layout_mode = 2
+
+[node name="Controls2" type="VBoxContainer" parent="SubViewport/Box/HB"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="Gain" type="HBoxContainer" parent="SubViewport/Box/HB/Controls2"]
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="LabelGain" type="Label" parent="SubViewport/Box/HB/Controls2/Gain"]
+layout_mode = 2
+text = "Gain"
+
+[node name="VSeparator" type="VSeparator" parent="SubViewport/Box/HB/Controls2/Gain"]
+visibility_layer = 0
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+
+[node name="Lock" type="TextureButton" parent="SubViewport/Box/HB/Controls2/Gain"]
+layout_mode = 2
+toggle_mode = true
+texture_normal = ExtResource("2_vya7j")
+texture_pressed = ExtResource("2_guku6")
+stretch_mode = 3
+
+[node name="HSliderGain" type="HSlider" parent="SubViewport/Box/HB/Controls2"]
+layout_mode = 2
+min_value = 0.01
+max_value = 1.0
+step = 0.1
+value = 0.51
+
+[node name="HSeparator4" type="HSeparator" parent="SubViewport/Box/HB/Controls2"]
+layout_mode = 2
+
+[node name="WeightedStr" type="HBoxContainer" parent="SubViewport/Box/HB/Controls2"]
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="LabelWeighted" type="Label" parent="SubViewport/Box/HB/Controls2/WeightedStr"]
+layout_mode = 2
+tooltip_text = "Weighted Strength"
+mouse_filter = 1
+text = "Wgt. Str."
+
+[node name="VSeparator" type="VSeparator" parent="SubViewport/Box/HB/Controls2/WeightedStr"]
+visibility_layer = 0
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+
+[node name="Lock" type="TextureButton" parent="SubViewport/Box/HB/Controls2/WeightedStr"]
+layout_mode = 2
+toggle_mode = true
+texture_normal = ExtResource("2_vya7j")
+texture_pressed = ExtResource("2_guku6")
+stretch_mode = 3
+
+[node name="HSliderWeighted" type="HSlider" parent="SubViewport/Box/HB/Controls2"]
+layout_mode = 2
+max_value = 1.0
+step = 0.01
+value = 0.5
+
+[node name="VSeparator2" type="VSeparator" parent="SubViewport/Box/HB"]
+layout_mode = 2
+
+[node name="Controls3" type="VBoxContainer" parent="SubViewport/Box/HB"]
+layout_mode = 2
+
+[node name="DomainWarp" type="Label" parent="SubViewport/Box/HB/Controls3"]
+layout_mode = 2
+text = "Domain Warp"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SubViewport/Box/HB/Controls3"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="SubViewport/Box/HB/Controls3/HBoxContainer"]
+layout_mode = 2
+text = "Enabled"
+
+[node name="CheckButton" type="CheckButton" parent="SubViewport/Box/HB/Controls3/HBoxContainer"]
+layout_mode = 2
+expand_icon = true
+
+[node name="DomainControls" type="VBoxContainer" parent="SubViewport/Box/HB/Controls3"]
+layout_mode = 2
+
+[node name="HSeparator" type="HSeparator" parent="SubViewport/Box/HB/Controls3/DomainControls"]
+layout_mode = 2
+
+[node name="DWAmplitude" type="HBoxContainer" parent="SubViewport/Box/HB/Controls3/DomainControls"]
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="Label" type="Label" parent="SubViewport/Box/HB/Controls3/DomainControls/DWAmplitude"]
+layout_mode = 2
+text = "Amplitude"
+
+[node name="VSeparator" type="VSeparator" parent="SubViewport/Box/HB/Controls3/DomainControls/DWAmplitude"]
+visibility_layer = 0
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+
+[node name="Lock" type="TextureButton" parent="SubViewport/Box/HB/Controls3/DomainControls/DWAmplitude"]
+layout_mode = 2
+toggle_mode = true
+texture_normal = ExtResource("2_vya7j")
+texture_pressed = ExtResource("2_guku6")
+stretch_mode = 3
+
+[node name="Amplitude" type="HSlider" parent="SubViewport/Box/HB/Controls3/DomainControls"]
+layout_mode = 2
+step = 0.1
+value = 30.0
+
+[node name="DWGain" type="HBoxContainer" parent="SubViewport/Box/HB/Controls3/DomainControls"]
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="Label" type="Label" parent="SubViewport/Box/HB/Controls3/DomainControls/DWGain"]
+layout_mode = 2
+text = "Gain"
+
+[node name="VSeparator" type="VSeparator" parent="SubViewport/Box/HB/Controls3/DomainControls/DWGain"]
+visibility_layer = 0
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+
+[node name="Lock" type="TextureButton" parent="SubViewport/Box/HB/Controls3/DomainControls/DWGain"]
+layout_mode = 2
+toggle_mode = true
+texture_normal = ExtResource("2_vya7j")
+texture_pressed = ExtResource("2_guku6")
+stretch_mode = 3
+
+[node name="Gain" type="HSlider" parent="SubViewport/Box/HB/Controls3/DomainControls"]
+layout_mode = 2
+max_value = 1.0
+step = 0.01
+value = 0.5
+
+[node name="DWLacunarity" type="HBoxContainer" parent="SubViewport/Box/HB/Controls3/DomainControls"]
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="Label" type="Label" parent="SubViewport/Box/HB/Controls3/DomainControls/DWLacunarity"]
+layout_mode = 2
+text = "Lacunarity"
+
+[node name="VSeparator" type="VSeparator" parent="SubViewport/Box/HB/Controls3/DomainControls/DWLacunarity"]
+visibility_layer = 0
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+
+[node name="Lock" type="TextureButton" parent="SubViewport/Box/HB/Controls3/DomainControls/DWLacunarity"]
+layout_mode = 2
+toggle_mode = true
+texture_normal = ExtResource("2_vya7j")
+texture_pressed = ExtResource("2_guku6")
+stretch_mode = 3
+
+[node name="Lacunarity" type="HSlider" parent="SubViewport/Box/HB/Controls3/DomainControls"]
+layout_mode = 2
+min_value = 1.0
+max_value = 20.0
+value = 5.0
+
+[node name="DWOctaves" type="HBoxContainer" parent="SubViewport/Box/HB/Controls3/DomainControls"]
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="Label" type="Label" parent="SubViewport/Box/HB/Controls3/DomainControls/DWOctaves"]
+layout_mode = 2
+text = "Octaves"
+
+[node name="VSeparator" type="VSeparator" parent="SubViewport/Box/HB/Controls3/DomainControls/DWOctaves"]
+visibility_layer = 0
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+
+[node name="Lock" type="TextureButton" parent="SubViewport/Box/HB/Controls3/DomainControls/DWOctaves"]
+layout_mode = 2
+toggle_mode = true
+texture_normal = ExtResource("2_vya7j")
+texture_pressed = ExtResource("2_guku6")
+stretch_mode = 3
+
+[node name="Octaves" type="HSlider" parent="SubViewport/Box/HB/Controls3/DomainControls"]
+layout_mode = 2
+min_value = 1.0
+max_value = 20.0
+value = 5.0
+
+[node name="DWFrequency" type="HBoxContainer" parent="SubViewport/Box/HB/Controls3/DomainControls"]
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="Label" type="Label" parent="SubViewport/Box/HB/Controls3/DomainControls/DWFrequency"]
+layout_mode = 2
+text = "Frequency"
+
+[node name="VSeparator" type="VSeparator" parent="SubViewport/Box/HB/Controls3/DomainControls/DWFrequency"]
+visibility_layer = 0
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+
+[node name="Lock" type="TextureButton" parent="SubViewport/Box/HB/Controls3/DomainControls/DWFrequency"]
+layout_mode = 2
+toggle_mode = true
+texture_normal = ExtResource("2_vya7j")
+texture_pressed = ExtResource("2_guku6")
+stretch_mode = 3
+
+[node name="Frequency" type="HSlider" parent="SubViewport/Box/HB/Controls3/DomainControls"]
+layout_mode = 2
+min_value = 0.01
+max_value = 0.2
+step = 0.01
+value = 0.05
+
+[node name="DWFractalType" type="HBoxContainer" parent="SubViewport/Box/HB/Controls3/DomainControls"]
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="Label" type="Label" parent="SubViewport/Box/HB/Controls3/DomainControls/DWFractalType"]
+layout_mode = 2
+text = "Fractal Type"
+
+[node name="VSeparator" type="VSeparator" parent="SubViewport/Box/HB/Controls3/DomainControls/DWFractalType"]
+visibility_layer = 0
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+
+[node name="Lock" type="TextureButton" parent="SubViewport/Box/HB/Controls3/DomainControls/DWFractalType"]
+layout_mode = 2
+toggle_mode = true
+texture_normal = ExtResource("2_vya7j")
+texture_pressed = ExtResource("2_guku6")
+stretch_mode = 3
+
+[node name="FracType" type="OptionButton" parent="SubViewport/Box/HB/Controls3/DomainControls"]
+layout_mode = 2
+item_count = 3
+selected = 0
+popup/item_0/text = "None"
+popup/item_0/id = 0
+popup/item_1/text = "Progressive"
+popup/item_1/id = 1
+popup/item_2/text = "Independent"
+popup/item_2/id = 2
+
+[node name="DWWarpType" type="HBoxContainer" parent="SubViewport/Box/HB/Controls3/DomainControls"]
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="Label" type="Label" parent="SubViewport/Box/HB/Controls3/DomainControls/DWWarpType"]
+layout_mode = 2
+text = "Warp Type"
+
+[node name="VSeparator" type="VSeparator" parent="SubViewport/Box/HB/Controls3/DomainControls/DWWarpType"]
+visibility_layer = 0
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+
+[node name="Lock" type="TextureButton" parent="SubViewport/Box/HB/Controls3/DomainControls/DWWarpType"]
+layout_mode = 2
+toggle_mode = true
+texture_normal = ExtResource("2_vya7j")
+texture_pressed = ExtResource("2_guku6")
+stretch_mode = 3
+
+[node name="WarpType" type="OptionButton" parent="SubViewport/Box/HB/Controls3/DomainControls"]
+layout_mode = 2
+item_count = 3
+selected = 0
+popup/item_0/text = "Simplex"
+popup/item_0/id = 0
+popup/item_1/text = "Simplex Reduced"
+popup/item_1/id = 1
+popup/item_2/text = "Basic Grid"
+popup/item_2/id = 2
+
+[connection signal="pressed" from="SubViewport/Box/HB/Controls/ButtonSave" to="." method="_on_button_save_pressed"]
+[connection signal="pressed" from="SubViewport/Box/HB/Controls/ButtonRandom" to="." method="_on_button_random_pressed"]
+[connection signal="pressed" from="SubViewport/Box/HB/Controls/ButtonReset" to="." method="_on_button_reset_pressed"]
+[connection signal="toggled" from="SubViewport/Box/HB/Controls/NoiseType/Lock" to="." method="_on_check_button_toggled"]
+[connection signal="item_selected" from="SubViewport/Box/HB/Controls/NoiseTypeOption" to="." method="_on_noise_type_option_item_selected"]
+[connection signal="toggled" from="SubViewport/Box/HB/Controls/FractalType/Lock" to="." method="_on_check_button_toggled"]
+[connection signal="item_selected" from="SubViewport/Box/HB/Controls/FractalTypeOption" to="." method="_on_option_button_item_selected"]
+[connection signal="toggled" from="SubViewport/Box/HB/Controls/Seed/Lock" to="." method="_on_check_button_toggled"]
+[connection signal="value_changed" from="SubViewport/Box/HB/Controls/HSliderSeed" to="." method="_on_h_slider_seed_value_changed"]
+[connection signal="toggled" from="SubViewport/Box/HB/Controls/Frequency/Lock" to="." method="_on_check_button_toggled"]
+[connection signal="value_changed" from="SubViewport/Box/HB/Controls/HSliderLacunarity2" to="." method="_on_h_slider_lacunarity_value_changed"]
+[connection signal="toggled" from="SubViewport/Box/HB/Controls/Octaves/Lock" to="." method="_on_check_button_toggled"]
+[connection signal="value_changed" from="SubViewport/Box/HB/Controls/HSliderOctaves" to="." method="_on_h_slider_octaves_value_changed"]
+[connection signal="toggled" from="SubViewport/Box/HB/Controls/Lacunarity/Lock" to="." method="_on_check_button_toggled"]
+[connection signal="value_changed" from="SubViewport/Box/HB/Controls/HSliderLacunarity" to="." method="_on_h_slider_lacunarity_value_changed"]
+[connection signal="toggled" from="SubViewport/Box/HB/Controls2/Gain/Lock" to="." method="_on_check_button_toggled"]
+[connection signal="value_changed" from="SubViewport/Box/HB/Controls2/HSliderGain" to="." method="_on_h_slider_gain_value_changed"]
+[connection signal="toggled" from="SubViewport/Box/HB/Controls2/WeightedStr/Lock" to="." method="_on_check_button_toggled"]
+[connection signal="value_changed" from="SubViewport/Box/HB/Controls2/HSliderWeighted" to="." method="_on_h_slider_weighted_value_changed"]
+[connection signal="toggled" from="SubViewport/Box/HB/Controls3/HBoxContainer/CheckButton" to="." method="_on_check_button_toggled"]
+[connection signal="toggled" from="SubViewport/Box/HB/Controls3/DomainControls/DWAmplitude/Lock" to="." method="_on_check_button_toggled"]
+[connection signal="value_changed" from="SubViewport/Box/HB/Controls3/DomainControls/Amplitude" to="." method="_on_amplitude_value_changed"]
+[connection signal="toggled" from="SubViewport/Box/HB/Controls3/DomainControls/DWGain/Lock" to="." method="_on_check_button_toggled"]
+[connection signal="value_changed" from="SubViewport/Box/HB/Controls3/DomainControls/Gain" to="." method="_on_gain_value_changed"]
+[connection signal="toggled" from="SubViewport/Box/HB/Controls3/DomainControls/DWLacunarity/Lock" to="." method="_on_check_button_toggled"]
+[connection signal="value_changed" from="SubViewport/Box/HB/Controls3/DomainControls/Lacunarity" to="." method="_on_lacunarity_value_changed"]
+[connection signal="toggled" from="SubViewport/Box/HB/Controls3/DomainControls/DWOctaves/Lock" to="." method="_on_check_button_toggled"]
+[connection signal="value_changed" from="SubViewport/Box/HB/Controls3/DomainControls/Octaves" to="." method="_on_octaves_value_changed"]
+[connection signal="toggled" from="SubViewport/Box/HB/Controls3/DomainControls/DWFrequency/Lock" to="." method="_on_check_button_toggled"]
+[connection signal="value_changed" from="SubViewport/Box/HB/Controls3/DomainControls/Frequency" to="." method="_on_frequency_value_changed"]
+[connection signal="toggled" from="SubViewport/Box/HB/Controls3/DomainControls/DWFractalType/Lock" to="." method="_on_check_button_toggled"]
+[connection signal="item_selected" from="SubViewport/Box/HB/Controls3/DomainControls/FracType" to="." method="_on_frac_type_item_selected"]
+[connection signal="toggled" from="SubViewport/Box/HB/Controls3/DomainControls/DWWarpType/Lock" to="." method="_on_check_button_toggled"]
+[connection signal="item_selected" from="SubViewport/Box/HB/Controls3/DomainControls/WarpType" to="." method="_on_warp_type_item_selected"]
