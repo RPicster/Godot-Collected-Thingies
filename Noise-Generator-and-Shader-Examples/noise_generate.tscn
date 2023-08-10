@@ -34,7 +34,6 @@ offset = Vector2(512, 0)
 
 [node name="HB" type="HBoxContainer" parent="SubViewport/Box"]
 layout_mode = 2
-size_flags_horizontal = 8
 
 [node name="Controls" type="VBoxContainer" parent="SubViewport/Box/HB"]
 layout_mode = 2
